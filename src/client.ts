@@ -9,7 +9,10 @@ export const request = async <T extends any>({
     fetch: window && window.fetch,
   },
 }: FetchObjArgument): Promise<FetchPromise<T>> => {
-  const { headers, fetch, ...otherOptions } = options
+  const { headers, fetch: baseFetch, ...otherOptions } = options
+  const fetch = baseFetch || (window && window.fetch)
+
+  // TODO: Throw an invariant error if fetch is not provided
 
   const body = JSON.stringify({
     query,

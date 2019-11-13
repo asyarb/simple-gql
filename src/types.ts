@@ -6,7 +6,7 @@ interface Headers {
 
 export interface Options {
   headers?: Headers
-  fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>
+  fetch?: (input: RequestInfo, init?: RequestInit) => Promise<Response>
   method?: RequestInit['method']
   mode?: RequestInit['mode']
   credentials?: RequestInit['credentials']

@@ -1,5 +1,5 @@
 import { Options, Client, FetchObjArgument, FetchPromise } from './types'
-import { ClientError } from 'errors'
+import { ClientError } from './errors'
 
 export const request = async <T extends any>({
   url,
@@ -26,20 +26,21 @@ export const request = async <T extends any>({
     ...otherOptions,
   })
   const contentType = request.headers.get('Content-Type')
-  const result =
+  const response =
     contentType && contentType.startsWith('application/json')
       ? await request.json()
       : await request.text()
 
-  if (!request.ok || result.errors || !result.data) {
-    const error = typeof result === 'string' ? { error: result } : result
+  if (!request.ok || response.errors || !response.data) {
+    const error = typeof response === 'string' ? { error: response } : response
+
     throw new ClientError(
       { ...error, status: request.status },
       { query, variables },
     )
   }
 
-  return result.data
+  return response
 }
 
 export const createClient = (

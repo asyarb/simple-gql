@@ -7,15 +7,19 @@
   - [Creating a re-useable client](#creating-a-re-useable-client)
 - [Handling Errors](#handling-errors)
 - [API](#api)
+- [Why this over `graphql-request`?](#why-this-over-graphql-request)
 - [License](#license)
 
 Lightweight GraphQL request/client aimed at usage in the browser. Can also be
 used in Node by providing your own implementation of `fetch`.
 
+Built to be used for minimal use cases or with any `Promise` data-fetching
+abstraction.
+
 ## Features
 
-- Simple, light and treeshakeable. No dependencies.
-- Functional API. Compose the API as needed.
+- Light and treeshakeable. No dependencies.
+- Functional API. Compose away as needed.
 - Tiny `gql` utility for editor syntax highlighting.
 - TypeScript support.
 
@@ -51,9 +55,7 @@ const response = await request({
   url: 'https://book-api/graphql',
   query,
   options: { headers: {} },
-  variables: {
-    title: 'Example Title',
-  },
+  variables: { title: 'Example Title' },
 })
 
 console.log(response.data)
@@ -93,6 +95,11 @@ handling errors will work.
 ## API
 
 TODO
+
+## Why this over `graphql-request`?
+
+Functional API, lighter & tree-shakeable, and no `fetch` polyfill bundled by
+default.
 
 ## License
 

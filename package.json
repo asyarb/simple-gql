@@ -12,9 +12,12 @@
   ],
   "scripts": {
     "start": "tsdx watch",
+    "prebuild": "rimraf ./dist",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint"
+    "lint": "tsdx lint",
+    "prerelease": "yarn build",
+    "release": "standard-version"
   },
   "dependencies": {},
   "devDependencies": {
@@ -26,6 +29,7 @@
     "husky": "^3.0.9",
     "node-fetch": "^2.6.0",
     "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
     "standard-version": "^7.0.0",
     "tsdx": "^0.11.0",
     "tslib": "^1.10.0",

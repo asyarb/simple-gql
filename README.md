@@ -94,7 +94,66 @@ handling errors will work.
 
 ## API
 
-TODO
+### `request`
+
+Make a plain GraphQL request.
+
+```js
+const request: <T>({ url: string, query: string, variables: {}, options: {}, }) => Promise<T>
+```
+
+Accepts an object as a parameter with the following keys:
+
+- `url`: The endpoint to request.
+- `query`: GraphQL query as a string.
+- `variables`: GraphQL variables to inject into your query.
+- `options`: Options. See [options](#options) for all available options.
+
+Returns a `Promise`.
+
+### `createClient`
+
+Creates a reusable client with a reusable `url` endpoint and `options` object.
+
+```js
+const createClient: (url: string, options?: Options) => Client
+```
+
+The returned `Client` has a `request` property that fires a GraphQL request:
+
+```js
+const client = createClient(url)
+const res = client.request(query)
+```
+
+For more information about all available options, see [options](#options).
+
+### `gql`
+
+Simple utility for enabling GraphQL syntax highlighting in supported editors:
+
+```js
+const query = gql`
+  {
+    Books {
+      author
+      name
+    }
+  }
+`
+```
+
+Returns the query string as is.
+
+### Options
+
+`request` and `createClient` take an `options` object that accepts the same
+options a normal fetch `Request` would accept in addition to the following keys:
+
+- `headers`: Headers to pass along with the request. Use this to send tokens and
+  other custom headers.
+- `fetch`: Fetch implementation to utilize. Defaults to `window.fetch`. Use this
+  if you plan to use this package in Node.
 
 ## Why this over `graphql-request`?
 

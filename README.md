@@ -99,14 +99,14 @@ handling errors will work.
 Make a plain GraphQL request.
 
 ```js
-const request: <T>({ url: string, query: string, variables: {}, options: {}, }) => Promise<T>
+const request: <T>({ url: string, query: string, variables?: object, options?: Options, }) => Promise<T>
 ```
 
 Accepts an object as a parameter with the following keys:
 
 - `url`: The endpoint to request.
 - `query`: GraphQL query as a string.
-- `variables`: GraphQL variables to inject into your query.
+- `variables`: GraphQL variable object to inject into your query.
 - `options`: Options. See [options](#options) for all available options.
 
 Returns a `Promise`.
@@ -119,14 +119,19 @@ Creates a reusable client with a reusable `url` endpoint and `options` object.
 const createClient: (url: string, options?: Options) => Client
 ```
 
-The returned `Client` has a `request` property that fires a GraphQL request:
+For more information about all available options available to `createClient`,
+see [options](#options).
+
+The returned `Client` has a `request` property that fires a GraphQL request.
 
 ```js
-const client = createClient(url)
-const res = client.request(query)
+client.request = <T>(query: string, variables?: Variables) => Promise<T>
 ```
 
-For more information about all available options, see [options](#options).
+`client.request` takes the following parameters:
+
+- `query`: The GraphQL request.
+- `variables`: GraphQL variables object to inject into your query.
 
 ### `gql`
 

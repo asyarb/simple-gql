@@ -41,14 +41,6 @@ export interface RequestArgs<V> {
   options?: FetchOptions
 }
 
-export interface FetchData<T> {
-  data?: T
-  extensions?: any
-  headers: Headers
-  status: number
-  errors?: GQLError[]
-}
-
 export interface Client {
-  request: <T, V>(query: string, variables?: V) => Promise<FetchData<T>>
+  request: <T, V>(query: string, variables?: V) => Promise<T>
 }

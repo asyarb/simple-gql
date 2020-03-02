@@ -1,4 +1,4 @@
-import { FetchOptions, Client, RequestArgs, FetchData } from './types'
+import { FetchOptions, Client, RequestArgs } from './types'
 import { ClientError } from './errors'
 
 export const request = async <ReturnType, Variables>({
@@ -8,7 +8,7 @@ export const request = async <ReturnType, Variables>({
   options = {
     fetch: window?.fetch,
   },
-}: RequestArgs<Variables>): Promise<FetchData<ReturnType>> => {
+}: RequestArgs<Variables>): Promise<ReturnType> => {
   const { headers, fetch: baseFetch, ...otherOptions } = options
   const fetch = baseFetch ?? window?.fetch
 
@@ -23,14 +23,9 @@ export const request = async <ReturnType, Variables>({
     body,
     ...otherOptions,
   })
-  const contentType = request.headers.get('Content-Type')
-  const response: FetchData<ReturnType> = contentType?.startsWith(
-    'application/json',
-  )
-    ? await request.json()
-    : await request.text()
+  const response = await request.json()
 
-  if (!request.ok || response.errors || !response.data) {
+  if (!request.ok || !response.data) {
     const error = typeof response === 'string' ? { error: response } : response
 
     throw new ClientError<Variables>(
@@ -39,7 +34,7 @@ export const request = async <ReturnType, Variables>({
     )
   }
 
-  return response
+  return response.data as ReturnType
 }
 
 export const createClient = (

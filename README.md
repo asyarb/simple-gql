@@ -7,14 +7,18 @@
   - [Creating a re-useable client](#creating-a-re-useable-client)
 - [Handling Errors](#handling-errors)
 - [API](#api)
+  - [`request`](#request)
+  - [`createClient`](#createclient)
+  - [`gql`](#gql)
+  - [Options](#options)
 - [Why this over `graphql-request`?](#why-this-over-graphql-request)
 - [License](#license)
 
 Lightweight GraphQL request/client aimed at usage in the browser. Can also be
 used in Node by providing your own implementation of `fetch`.
 
-Built to be used for minimal use cases or with any `Promise` data-fetching
-abstraction.
+Built to be used for minimal use cases or with any `Promise` based data-fetching
+abstraction such as `react-query`.
 
 ## Features
 

@@ -1,10 +1,8 @@
-type Variables = { [key: string]: any }
-
 interface Headers {
   [key: string]: string
 }
 
-export interface Options {
+export interface FetchOptions {
   headers?: Headers
   fetch?: (input: RequestInfo, init?: RequestInit) => Promise<Response>
   method?: RequestInit['method']
@@ -17,15 +15,9 @@ export interface Options {
   integrity?: RequestInit['integrity']
 }
 
-export interface GQLError {
-  message: string
-  locations: { line: number; column: number }[]
-  path: string[]
-}
-
-export interface GQLRequest {
+export interface GQLRequest<V> {
   query: string
-  variables?: Variables
+  variables?: V
 }
 
 export interface GQLResponse {
@@ -36,14 +28,20 @@ export interface GQLResponse {
   [key: string]: any
 }
 
-export interface FetchObjArgument {
-  url: string
-  query: string
-  variables?: Variables
-  options?: Options
+export interface GQLError {
+  message: string
+  locations: { line: number; column: number }[]
+  path: string[]
 }
 
-export interface FetchPromise<T> {
+export interface RequestArgs<V> {
+  url: string
+  query: string
+  variables?: V
+  options?: FetchOptions
+}
+
+export interface FetchData<T> {
   data?: T
   extensions?: any
   headers: Headers
@@ -52,8 +50,5 @@ export interface FetchPromise<T> {
 }
 
 export interface Client {
-  request: <T extends any>(
-    query: string,
-    variables?: Variables,
-  ) => Promise<FetchPromise<T>>
+  request: <T, V>(query: string, variables?: V) => Promise<FetchData<T>>
 }

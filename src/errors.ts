@@ -7,8 +7,8 @@ const extractMessage = (response: GQLResponse) => {
   return `GraphQL Error (Code: ${response.status})`
 }
 
-export class ClientError extends Error {
-  constructor(response: GQLResponse, request: GQLRequest) {
+export class ClientError<V> extends Error {
+  constructor(response: GQLResponse, request: GQLRequest<V>) {
     super(
       `${extractMessage(response)}: ${JSON.stringify({
         response,

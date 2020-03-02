@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.4](https://github.com/asyarb/simple-gql/compare/v0.1.3...v0.1.4) (2020-03-02)
+
+
+### Bug Fixes
+
+* types ([14480ff](https://github.com/asyarb/simple-gql/commit/14480ff81f8258f35a8ba8ad612aa54e3c4a793f))
+
 ### [0.1.3](https://github.com/asyarb/simple-gql/compare/v0.1.2...v0.1.3) (2019-11-15)
 
 ### [0.1.2](https://github.com/asyarb/simple-gql/compare/v0.1.1...v0.1.2) (2019-11-15)

@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/asyarb/simple-gql/compare/v0.1.4...v0.1.5) (2020-03-02)
+
+
+### Features
+
+* simplify types more ([6cf5db8](https://github.com/asyarb/simple-gql/commit/6cf5db8e5ea1e764136c2f8f4ef84435aacd2e9a))
+
+
+### Bug Fixes
+
+* move return type cast hgiher ([7602a14](https://github.com/asyarb/simple-gql/commit/7602a14035184f2b64a286f179d312791d7d2e7e))
+
 ### [0.1.4](https://github.com/asyarb/simple-gql/compare/v0.1.3...v0.1.4) (2020-03-02)
 
 

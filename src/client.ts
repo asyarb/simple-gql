@@ -23,7 +23,7 @@ export const request = async <ReturnType, Variables>({
     body,
     ...otherOptions,
   })
-  const response = await request.json()
+  const response = (await request.json()) as { data: ReturnType }
 
   if (!request.ok || !response.data) {
     const error = typeof response === 'string' ? { error: response } : response
@@ -34,7 +34,7 @@ export const request = async <ReturnType, Variables>({
     )
   }
 
-  return response.data as ReturnType
+  return response.data
 }
 
 export const createClient = (

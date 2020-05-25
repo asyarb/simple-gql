@@ -1,3 +1,15 @@
 module.exports = {
-  extends: ['react-app'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  extends: ['plugin:@typescript-eslint/recommended'],
+  rules: {
+    '@typescript-eslint/member-delimiter-style': [
+      'error',
+      {
+        multiline: {
+          delimiter: 'none',
+        },
+      },
+    ],
+  },
 }

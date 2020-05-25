@@ -13,7 +13,8 @@
     "url": "https://github.com/asyarb/simple-gql.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "start": "tsdx watch",
@@ -28,19 +29,22 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@types/jest": "^25.1.3",
-    "@types/node-fetch": "^2.5.5",
-    "fetch-mock": "^9.0.0",
-    "husky": "^4.2.3",
+    "@types/jest": "^25.2.3",
+    "@types/node-fetch": "^2.5.7",
+    "fetch-mock": "^9.10.1",
+    "graphql": "^15.0.0",
+    "husky": "^4.2.5",
     "node-fetch": "^2.6.0",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "standard-version": "^7.1.0",
-    "tsdx": "^0.12.3",
-    "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "standard-version": "^8.0.0",
+    "tsdx": "^0.13.2",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.3"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "graphql": "^15.0.0"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"

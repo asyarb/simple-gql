@@ -1,20 +1,16 @@
 {
-  "include": ["src", "types", "test"],
+  "include": ["src", "types"],
   "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "lib": ["dom", "esnext"],
+    "module": "ESNext",
+    "target": "ES6",
+    "lib": ["DOM", "ESNext", "DOM.Iterable"],
     "importHelpers": true,
     "declaration": true,
     "sourceMap": true,
-    "rootDir": "./",
+    "rootDir": "./src",
     "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
@@ -22,7 +18,7 @@
     "paths": {
       "*": ["src/*", "node_modules/*"]
     },
-    "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   }
 }

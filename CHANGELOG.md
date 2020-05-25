@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/asyarb/simple-gql/compare/v0.1.5...v0.2.0) (2020-05-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removes the createClient function for creating a reusable client. Leaves composing a reusable client to consumer.
+
+See readme for an example.
+
+### Features
+
+* only expose single request function ([73b9108](https://github.com/asyarb/simple-gql/commit/73b9108c842b3822261ca0aaed12e959ab5652d2))
+
 ### [0.1.5](https://github.com/asyarb/simple-gql/compare/v0.1.4...v0.1.5) (2020-03-02)
 
 

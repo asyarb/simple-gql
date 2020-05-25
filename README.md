@@ -12,15 +12,15 @@
   - [Options](#options)
 - [License](#license)
 
-Lightweight GraphQL request/client aimed at usage in the browser. Can also be
-used in Node by providing your own implementation of `fetch`.
+Lightweight GraphQL wrapper around `fetch`. Can also be used in Node by
+providing your own implementation of `fetch`.
 
-Built to be used for minimal use cases or with any `Promise` based data-fetching
-abstraction such as `react-query`.
+Built to be used for minimal use cases or in conjunction with any `Promise`
+based data-fetching abstraction such as `react-query`.
 
 ## Features
 
-- Light and treeshakeable. No dependencies.
+- Lightweight. No dependencies.
 - Written in TypeScript.
 - Functional API.
 - Supports plain string queries or `ASTNode`s from `graphql-tag`.
@@ -149,7 +149,7 @@ Accepts an object as a parameter with the following keys:
 - `url`: The endpoint to request.
 - `query`: GraphQL query as a string or `ASTNode` returned from `graphql-tag`.
 - `variables`: GraphQL variable object to inject into your query.
-- `options`: Options. See [options](#options) for all available options.
+- `options`: Options. See [options](#options) for additional information.
 
 Returns a `Promise`.
 
@@ -159,7 +159,7 @@ Returns a `Promise`.
 `fetch` would accept in addition to the following:
 
 - `fetch`: Fetch implementation to utilize. Defaults to `window.fetch`. Use this
-  if you plan to use this package in Node.
+  if you plan to use this server-side/in Node.
 
 If you need to send your GraphQL request via GET, just set the appropriate
 `headers.method` option. `gqlFetch` will handle setting your `query` and

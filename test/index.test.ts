@@ -1,8 +1,14 @@
-import fetchMock from 'fetch-mock'
-import fetch from 'node-fetch'
+import gql from 'graphql-tag'
+import nodeFetch, { Response } from 'node-fetch'
 
-import { request, gql, createClient } from '../dist'
+import { fetchGql } from '../src'
 
+global.fetch = nodeFetch
+const fetchSpy = jest.spyOn(global, 'fetch')
+
+afterEach(() => fetchSpy.mockClear())
+
+const url = 'http://fake-api.com/graphql'
 const mockResponse = {
   ok: true,
   data: {
@@ -11,107 +17,46 @@ const mockResponse = {
     },
   },
 }
-const url = 'http://fake-api.com/graphql'
-const options = {
-  overwriteRoutes: false,
-}
-const query = gql`
+const query = `
   query {
     user {
       id
     }
   }
 `
-//@ts-ignore
-global.fetch = fetch
 
-describe('minimal use cases', () => {
-  test('minimal request use case', async () => {
-    fetchMock.once(url, mockResponse, options)
+test('returns the data requested from a GraphQL query', async () => {
+  fetchSpy.mockImplementationOnce(
+    async () => new Response(JSON.stringify(mockResponse), { status: 200 }),
+  )
 
-    const res = await request({ url, query })
-    expect(res.data).toEqual(mockResponse.data)
-  })
-
-  test('minimal createClient use case', async () => {
-    fetchMock.once(url, mockResponse, options)
-
-    const client = createClient(url)
-
-    const res = await client.request(query)
-    expect(res.data).toEqual(mockResponse.data)
-  })
+  expect(await fetchGql({ url, query })).toEqual(mockResponse.data)
 })
 
-describe('specifying headers', () => {
-  test('request headers', async () => {
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Custom-Header': 'custom',
+test('returns the data request from a GraphQL query made with graphql-tag', async () => {
+  fetchSpy.mockImplementationOnce(
+    async () => new Response(JSON.stringify(mockResponse), { status: 200 }),
+  )
+  const query = gql`
+    query {
+      user {
+        id
+      }
     }
-    const response = {
-      ...mockResponse,
-      headers,
-    }
-    fetchMock.once(url, response, options)
+  `
 
-    const res = await request({
-      url,
-      query,
-      options: {
-        headers,
-      },
-    })
-
-    expect(res.headers).toEqual(response.headers)
-    expect(res.data).toEqual(response.data)
-  })
-
-  test('client request headers', async () => {
-    const headers = {
-      'Content-Type': 'application/json',
-      'X-Custom-Header': 'custom',
-    }
-    const response = {
-      ...mockResponse,
-      headers,
-    }
-    fetchMock.once(url, response, options)
-
-    const client = createClient(url, {
-      headers,
-    })
-    const res = await client.request(query)
-
-    expect(res.headers).toEqual(response.headers)
-    expect(res.data).toEqual(response.data)
-  })
+  expect(await fetchGql({ url, query })).toEqual(mockResponse.data)
 })
 
-describe('errors', () => {
-  test('request error', async () => {
-    const response = {
-      ...mockResponse,
-      status: 500,
-      ok: false,
-      errors: 'Syntax Error GraphQL request...',
-    }
-    fetchMock.once(url, response, options)
+test('throws an error if the response is not flagged as ok', async () => {
+  fetchSpy.mockImplementationOnce(
+    async () =>
+      new Response(JSON.stringify({ ...mockResponse, ok: false }), {
+        status: 500,
+      }),
+  )
 
-    await expect(request({ url, query })).rejects.toThrow()
-  })
+  const promise = fetchGql({ url, query })
 
-  test('client request error', async () => {
-    const response = {
-      ...mockResponse,
-      status: 500,
-      ok: false,
-      errors: 'Syntax Error GraphQL request...',
-    }
-    fetchMock.once(url, response, options)
-
-    const client = createClient(url)
-
-    await expect(client.request(query)).rejects.toThrow()
-  })
+  expect(promise).rejects.toThrow()
 })

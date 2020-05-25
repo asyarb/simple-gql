@@ -2,15 +2,33 @@ import { print } from 'graphql/language/printer'
 import { ASTNode } from 'graphql'
 
 interface FetchOptions extends Omit<RequestInit, 'body'> {
+  /** Fetch implementation to use for the request. If used in
+   * a server environment, this argument must be used.
+   *
+   * @default window.fetch
+   **/
   fetch?: typeof fetch
 }
 interface RequestArgs<V> {
+  /** The endpoint to make a request to. */
   url: string
+  /** The string or ASTNode query to run. */
   query: string | ASTNode
+  /** The variables to provide to this query. */
   variables?: V
+  /** Any valid `fetch` options to supply to the query. */
   options?: FetchOptions
 }
 
+/**
+ * Helper to facilitate the creation of the proper querystring for a GET
+ * request.
+ * @private
+ *
+ * @param rawUrl The endpoint to send the query to.
+ * @param variables The variables to encode as a query string.
+ * @returns The full URL with querystring parameters.
+ */
 const gqlGetURL = <V>(rawUrl: string, query: string, variables: V): string => {
   const url = new URL(rawUrl)
   url.searchParams.set('query', query)
@@ -20,9 +38,12 @@ const gqlGetURL = <V>(rawUrl: string, query: string, variables: V): string => {
 }
 
 /**
- * Make a a graphql request to the requested endpoint.
+ * Make a GraphQL request with the provided arguments
+ *
+ * @param args Arguments for the query.
+ * @returns A promise with the data requested in the GraphQL query.
  */
-export const gqlRequest = async <ReturnType, Variables>({
+export const fetchGql = async <ReturnType, Variables>({
   url,
   query,
   variables,

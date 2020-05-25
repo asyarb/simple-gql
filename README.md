@@ -3,15 +3,13 @@
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Plain request](#plain-request)
-  - [Creating a re-useable client](#creating-a-re-useable-client)
-- [Handling Errors](#handling-errors)
+  - [Plain request with JavaScript](#plain-request-with-javascript)
+  - [Using `graphql-tag` and TypeScript](#using-graphql-tag-and-typescript)
+  - [Creating a re-useable client with TypeScript](#creating-a-re-useable-client-with-typescript)
+- [Error handling](#error-handling)
 - [API](#api)
-  - [`request`](#request)
-  - [`createClient`](#createclient)
-  - [`gql`](#gql)
+  - [`gqlFetch`](#gqlfetch)
   - [Options](#options)
-- [Why this over `graphql-request`?](#why-this-over-graphql-request)
 - [License](#license)
 
 Lightweight GraphQL request/client aimed at usage in the browser. Can also be
@@ -23,9 +21,9 @@ abstraction such as `react-query`.
 ## Features
 
 - Light and treeshakeable. No dependencies.
-- Functional API. Compose away as needed.
-- Tiny `gql` utility for editor syntax highlighting.
-- TypeScript support.
+- Written in TypeScript.
+- Functional API.
+- Supports plain string queries or `ASTNode`s from `graphql-tag`.
 
 ## Installation
 
@@ -39,12 +37,12 @@ yarn add simple-gql
 
 ## Usage
 
-### Plain request
+### Plain request with JavaScript
 
 ```js
-import { request, gql } from 'simple-gql'
+import { gqlFetch } from 'simple-gql'
 
-const query = gql`
+const query = `
   query getBook($title: String!) {
     Book(title: $title) {
       publishDate
@@ -55,20 +53,30 @@ const query = gql`
   }
 `
 
-const response = await request({
+const response = await gqlFetch({
   url: 'https://book-api/graphql',
   query,
-  options: { headers: {} },
   variables: { title: 'Example Title' },
 })
-
-console.log(response.data)
 ```
 
-### Creating a re-useable client
+### Using `graphql-tag` and TypeScript
 
-```js
-import { createClient, gql } from 'simple-gql'
+```ts
+import { gqlFetch } from 'simple-gql'
+import gql from 'graphql-tag'
+
+interface QueryVaraibles {
+  title: string
+}
+interface QueryData {
+  Book: {
+    publishDate: number
+    author: {
+      name: string
+    }
+  }
+}
 
 const query = gql`
   query getBook($title: String!) {
@@ -81,93 +89,81 @@ const query = gql`
   }
 `
 
-const variables = {
-  title: 'Example Book',
-}
-
-const client = createClient('https://book-api/graphql', { headers: {} })
-const response = client.request(query, variables)
-
-console.log(response.data)
+const response = await gqlFetch<QueryData, QueryVariables>({
+  url: 'https://book-api/graphql',
+  query,
+  variables: { title: 'Example Title' },
+})
 ```
 
-## Handling Errors
+### Creating a re-useable client with TypeScript
 
-Utilizing `try` and `catch` blocks or any other `Promise`-based strategy for
-handling errors will work.
+We can create a reusable client with some function composition and closures. See
+the example below for a TypeScript example.
+
+```ts
+import { gqlFetch } from 'simple-gql'
+import { ASTNode } from 'graphql'
+
+export const gqlRequest = async <T, V>(
+  query: string | ASTNode,
+  variables: V,
+) => {
+  // Perform any pre-request logic you need here.
+  const accessToken = myTokenLogic()
+
+  const response = await gqlFetch<T, V>({
+    query,
+    variables,
+    url: 'https://your-endpoint.com/graphql',
+    options: {
+      // Your default options.
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    },
+  })
+
+  return response
+}
+```
+
+## Error handling
+
+This library will make no attempt to handle your errors and leaves it up to the
+developer to handle them. It will throw any error it receives, just like a
+`fetch` request would.
 
 ## API
 
-### `request`
+### `gqlFetch`
 
 Make a plain GraphQL request.
 
 ```js
-const request: <T>({ url: string, query: string, variables?: object, options?: Options, }) => Promise<T>
+const gqlFetch: <T>({ url: string, query: string | ASTNode, variables?: object, options?: Options, }) => Promise<T>
 ```
 
 Accepts an object as a parameter with the following keys:
 
 - `url`: The endpoint to request.
-- `query`: GraphQL query as a string.
+- `query`: GraphQL query as a string or `ASTNode` returned from `graphql-tag`.
 - `variables`: GraphQL variable object to inject into your query.
 - `options`: Options. See [options](#options) for all available options.
 
 Returns a `Promise`.
 
-### `createClient`
-
-Creates a reusable client with a reusable `url` endpoint and `options` object.
-
-```js
-const createClient: (url: string, options?: Options) => Client
-```
-
-For more information about all available options available to `createClient`,
-see [options](#options).
-
-The returned `Client` has a `request` property that fires a GraphQL request.
-
-```js
-client.request = <T>(query: string, variables?: Variables) => Promise<T>
-```
-
-`client.request` takes the following parameters:
-
-- `query`: The GraphQL request.
-- `variables`: GraphQL variables object to inject into your query.
-
-### `gql`
-
-Simple utility for enabling GraphQL syntax highlighting in supported editors:
-
-```js
-const query = gql`
-  {
-    Books {
-      author
-      name
-    }
-  }
-`
-```
-
-Returns the query string as is.
-
 ### Options
 
-`request` and `createClient` take an `options` object that accepts the same
-options a normal fetch `Request` would accept in addition to the following keys:
+`gqlFetch` takes an `options` object that accepts the same options a normal
+`fetch` would accept in addition to the following:
 
-- `headers`: Headers to pass along with the request. Use this to send tokens and
-  other custom headers.
 - `fetch`: Fetch implementation to utilize. Defaults to `window.fetch`. Use this
   if you plan to use this package in Node.
 
-## Why this over `graphql-request`?
-
-Functional API, lighter & tree-shakeable, and no `fetch` polyfill bundled by
-default.
+If you need to send your GraphQL request via GET, just set the appropriate
+`headers.method` option. `gqlFetch` will handle setting your `query` and
+`variables` as querystring parameters.
 
 ## License
 

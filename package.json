@@ -4,43 +4,50 @@
   "license": "MIT",
   "description": "Lightweight GraphQL request utiltiy.",
   "author": "Anthony Yarbrough <asyarb@hawaii.edu>",
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/simple-gql.esm.js",
   "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "homepage": "https://github.com/asyarb/simple-gql",
+  "keywords": [
+    "graphql",
+    "small",
+    "fetch"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/asyarb/simple-gql.git"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "start": "tsdx watch",
-    "prebuild": "rimraf ./dist",
     "build": "tsdx build",
     "test": "tsdx test",
-    "lint": "tsdx lint",
+    "lint": "eslint src/**/*.ts",
     "prerelease": "yarn build",
     "release": "standard-version"
   },
-  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "@types/jest": "^25.1.3",
-    "@types/node-fetch": "^2.5.5",
-    "fetch-mock": "^9.0.0",
-    "husky": "^4.2.3",
+    "@types/jest": "^25.2.3",
+    "@types/node-fetch": "^2.5.7",
+    "graphql": "^15.0.0",
+    "graphql-tag": "^2.10.3",
+    "husky": "^4.2.5",
     "node-fetch": "^2.6.0",
-    "prettier": "^1.19.1",
-    "rimraf": "^3.0.2",
-    "standard-version": "^7.1.0",
-    "tsdx": "^0.12.3",
-    "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "prettier": "^2.0.5",
+    "standard-version": "^8.0.0",
+    "tsdx": "^0.13.2",
+    "tslib": "^1.13.0",
+    "typescript": "^3.9.3"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "graphql": "^15.0.0"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"

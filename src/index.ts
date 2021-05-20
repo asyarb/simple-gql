@@ -63,7 +63,7 @@ export const fetchGql = async <ReturnType, Variables>({
     headers: { 'Content-Type': 'application/json', ...headers },
     body: isPostRequest
       ? JSON.stringify({
-          query,
+          query: resolvedQuery,
           variables,
         })
       : undefined,
